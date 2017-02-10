@@ -34,7 +34,8 @@ it("should execute and return values", function(done) {
     var event = { "operation": "runtime.execute",
         "inputs":{
             "templateUrl" : "https://s3.amazonaws.com/integrify/DEV/test-template.docx",
-            "fileName":"foo.docx",
+            "fileName":"foo",
+            "fileExtension":".docx",
             "name": "joe",
             "description" : "a long winded description"
         },"integrifyServiceUrl":"http://localhost:3500",
