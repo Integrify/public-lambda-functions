@@ -9,7 +9,7 @@ var path = require('path');
 //create a new Integrfiy AWS Lambda object passing in a configuration object with inputs, outputs and your execute function
 var config = {
         inputs: [{key:"templateUrl", type:"string"},
-            {key:"fileName", type:"string"}],
+            {key:"fileName", type:"string"}, {key:"fileExtension", type:"string"}],
         outputs:[{key:"fileKey", type:"fileattachment"}, {key:"fileName", type: "string"}]
 }
 
@@ -56,15 +56,16 @@ var exec = function (event, context, callback) {
 
 
         var ext, mimeType;
-        if (event.inputs.fileName.indexOf('.pptx') > -1) {
+        if (event.inputs.fileExtension.indexOf('.pptx') > -1) {
             ext = ".pptx";
             mimeType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
         } else {
             mimeType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
             ext = ".docx"
         }
+        event.inputs.fileName  = event.inputs.fileName + event.inputs.fileExtension;
         // buf is a nodejs buffer, you can either write it to a file or do anything else with it.
-        //fs.writeFileSync(path.resolve(__dirname, 'output1.docx'), buf);
+        //fs.writeFileSync(path.resolve(__dirname, event.inputs.fileName), buf);
 
         let integrifyServiceUrl = event.inputs.integrifyServiceUrl || event.integrifyServiceUrl;
         var req = request.post(integrifyServiceUrl + '/files/upload/', {'auth': {
