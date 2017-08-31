@@ -6,13 +6,14 @@ var path = require('path');
 var map = require('map-stream')
 var vfs = require('vinyl-fs');
 var request = require("request")
-var srcStream = require("vinyl-source-stream")
+
+var buffStream = require("vinyl-source-buffer")
 
 //create a new Integrfiy AWS Lambda object passing in a configuration object with inputs, outputs and your execute function
 var config = {
         inputs: [{key:"file", type:"string"},
-            {key:"destination", type:"string"},
             {key:"sharePointUrl", type:"string"},
+            {key:"destinationFile", type:"string"},
             {key:"destinationFolder", type:"string"},
             {key:"userName", type:"string"},
             {key:"password", type:"string"},
@@ -26,14 +27,20 @@ var config = {
 var exec = function (event, context, callback) {
             console.info(event);
 
-    request('http://google.com/doodle.png')
-        .pipe(srcStream('doodle.png'))
+
+
+    let creds = {username: event.inputs.userName , password: event.inputs.password };
+    let siteUrl = event.inputs.sharePointUrl ;
+
+    let x = request({url: 'http://www.integrify.com/wp-content/themes/integrify/images/logo.png'});
+
+    x.pipe(buffStream('logo.png'))
         .pipe(map(function(file, callback) {
             spsave({
                 siteUrl: 'https://integrify531.sharepoint.com'
             }, {username: 'rich.trusky@integrify.com', password: 'GuaCPQZCxMDG0UJR'}, {
                 file: file,
-                folder: 'Test'
+                folder: event.inputs.destinationFolder
             }).then(function (x) {
                 console.log(x);
                 return callback(null, {shrePointFileUrl: x});
@@ -44,6 +51,23 @@ var exec = function (event, context, callback) {
                 });
         }));
 
+    // spsave({
+    //         siteUrl: siteUrl,
+    //         checkin: true,
+    //         checkinType: 1
+    //     },
+    //     creds, {
+    //         folder: event.inputs.destinationFolder ,
+    //         // fileName: event.inputs.destinationFile ,
+    //         // fileContent: 'hello world'
+    //         glob: 'integrify-sharepoint-push/package.json'
+    //     }).then(result => {
+    //         let spUrl = event.inputs.sharePointUrl + "/" + event.inputs.detinationFolder + "/" + event.inputs.detinationFile;
+    //         return callback(null, {sharePointFileUrl:spUrl})
+    // }).catch(e =>{
+    //     console.log(e);
+    //     return callback(e);
+    // })
 
 
 };

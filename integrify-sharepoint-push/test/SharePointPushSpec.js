@@ -42,11 +42,12 @@ it("should execute and return values", function(done) {
     this.timeout(100000);
     var event = { "operation": "runtime.execute",
         "inputs":{
-            "file" : "https://s3.amazonaws.com/integrify/DEV/test-template.docx",
-            "sharePointUrl":"Test",
-            "destinationFolder":".docx",
-            "userName": "joe",
-            "password" : "a long winded description"
+            "file" : "package.json",
+            "sharePointUrl":"https://integrify531.sharepoint.com",
+            "destinationFile": "monkey.json",
+            "destinationFolder":"Shared Documents/Test",
+            "userName": "rich.trusky@integrify.com",
+            "password" : "GuaCPQZCxMDG0UJR"
         },"integrifyServiceUrl":"http://localhost:3500",
         "accessToken":"20e22223855e4a5ab0e6c17e2b49d409"
 
@@ -55,7 +56,7 @@ it("should execute and return values", function(done) {
     slackLambda.handler(event, null, function(err,result){
         "use strict";
         //console.log(result)
-        expect(result.sharePointUrl).toExist();
+        expect(result.sharePointFileUrl).toExist();
         done();
 
     })
