@@ -44,10 +44,10 @@ it("should execute and return values", function(done) {
         "inputs":{
             "requestSid": "33581110-7424-45d0-bd18-a4ee9df0d419",
             "file" : "2014-04-16T19-00-17.386Z.json",
-            "sharePointUrl":"https://integrify531.sharepoint.com",
+            "sharePointUrl":"https://yourcompany.sharepoint.com",
             "destinationFolder":"Shared Documents/Test",
-            "username": "rich.trusky@integrify.com",
-            "password" : "GuaCPQZCxMDG0UJR"
+            "username": "blah",
+            "password" : "blah"
         },"integrifyServiceUrl":"http://localhost:3500",
         "accessToken":"20e22223855e4a5ab0e6c17e2b49d409"
 
