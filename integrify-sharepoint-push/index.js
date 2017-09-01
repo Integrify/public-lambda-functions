@@ -11,15 +11,18 @@ var buffStream = require("vinyl-source-buffer")
 
 //create a new Integrfiy AWS Lambda object passing in a configuration object with inputs, outputs and your execute function
 var config = {
-        inputs: [{key:"file", type:"string"},
+        inputs: [
+            {key:"requestSid", type:"string"},
+            {key:"file", type:"string"},
             {key:"sharePointUrl", type:"string"},
-            {key:"destinationFile", type:"string"},
             {key:"destinationFolder", type:"string"},
-            {key:"userName", type:"string"},
+            {key:"username", type:"string"},
             {key:"password", type:"string"},
-            {key:"checkin", type:"string"},
+            {key:"fba", type:"bool"},
+            {key:"checkin", type:"bool"},
             {key:"checkinType", type:"string"},
-            {key: "'metaData", type: "string"}],
+            {key:"checkinMessage", type:"string"},
+            {key: "metadata", type: "object"}],
         outputs:[{key:"sharePointFileUrl", type:"string"}]
 }
 
@@ -27,29 +30,77 @@ var config = {
 var exec = function (event, context, callback) {
             console.info(event);
 
+    //get a list of files from integrify for the request using the REST API
+    //files/instancelist/:instance_sid
+
+    request.get(event.integrifyServiceUrl + '/files/instancelist/' + event.inputs.requestSid, {'auth': {
+        'bearer': event.inputs.accessToken || event.accessToken
+    }}, function (err, httpResponse, body) {
+
+        let integrifyFiles = JSON.parse(body);
+        if (err || integrifyFiles.length == 0) {
+            console.error(err || "no files found" );
+            return callback(err || "no files found");
+        }
 
 
-    let creds = {username: event.inputs.userName , password: event.inputs.password };
-    let siteUrl = event.inputs.sharePointUrl ;
+        let integrifyFile = integrifyFiles.sort(function(a,b) {
+            return new Date(a.CreatedDate).getTime() - new Date(b.CreatedDate).getTime()
+        }).find(f => f.FileName == event.inputs.file);
 
-    let x = request({url: 'http://www.integrify.com/wp-content/themes/integrify/images/logo.png'});
+        if (!integrifyFile) {
+            let em = "no matching file for this request";
+            console.error(em);
+            return callback(em)
+        }
 
-    x.pipe(buffStream('logo.png'))
-        .pipe(map(function(file, callback) {
-            spsave({
-                siteUrl: 'https://integrify531.sharepoint.com'
-            }, {username: 'rich.trusky@integrify.com', password: 'GuaCPQZCxMDG0UJR'}, {
-                file: file,
-                folder: event.inputs.destinationFolder
-            }).then(function (x) {
-                console.log(x);
-                return callback(null, {shrePointFileUrl: x});
-            })
-                .catch(function (err) {
+        //get the file from Integrify and save it to sharepoint
+        let creds = {username: event.inputs.userName , password: event.inputs.password };
+        let siteUrl = event.inputs.sharePointUrl ;
+
+        let integrifyFileUrl = integrifyFile.StreamEndpoint;
+        let x = request(event.integrifyServiceUrl + integrifyFileUrl,{'auth': {
+            'bearer': event.inputs.accessToken || event.accessToken
+        }});
+
+        let spSaveCoreOpts = {
+            siteUrl: event.inputs.sharePointUrl
+        }
+        spSaveCoreOpts.checkin = event.inputs.checkin || false;
+        if(spSaveCoreOpts.checkin) {
+            spSaveCoreOpts.checkinType = event.inputs.checkinType || 0;
+            spSaveCoreOpts.checkinMessage = event.inputs.checkinMessage || "uploaded from Integrify";
+        }
+
+
+
+        spSaveCoreOpts.checkin = event.inputs.checkin || false;
+        spSaveCoreOpts.checkin = event.inputs.checkin || false;
+        x.pipe(buffStream(event.inputs.file))
+            .pipe(map(function(file, done) {
+                spsave(spSaveCoreOpts, {username: event.inputs.username, password: event.inputs.password}, {
+                    file: file,
+                    folder: event.inputs.destinationFolder
+                }).then(function (x) {
+                    console.log(x);
+                    let spUrl = event.inputs.sharePointUrl + "/" + event.inputs.destinationFolder + "/" + event.inputs.file;
+                    callback(null, {sharePointFileUrl: spUrl});
+
+                }).catch(function (err) {
                     console.error(err);
                     callback(err);
-                });
-        }));
+
+                }).finally(function(){
+                    return done();
+                })
+            }));
+
+    })
+
+    //then, get the file based on event.inputs.questionId
+
+
+
 
     // spsave({
     //         siteUrl: siteUrl,
