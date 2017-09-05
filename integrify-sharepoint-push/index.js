@@ -13,7 +13,7 @@ var buffStream = require("vinyl-source-buffer")
 var config = {
         inputs: [
             {key:"requestSid", type:"string"},
-            {key:"file", type:"string"},
+            {key:"file", type:"file"},
             {key:"sharePointUrl", type:"string"},
             {key:"destinationFolder", type:"string"},
             {key:"username", type:"string"},
@@ -21,8 +21,7 @@ var config = {
             {key:"fba", type:"bool"},
             {key:"checkin", type:"bool"},
             {key:"checkinType", type:"string"},
-            {key:"checkinMessage", type:"string"},
-            {key: "metadata", type: "object"}],
+            {key:"checkinMessage", type:"string"}],
         outputs:[{key:"sharePointFileUrl", type:"string"}]
 }
 
