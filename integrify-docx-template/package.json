@@ -1,5 +1,5 @@
 {
-  "name": "integrify-docx-templatejzip@latest",
+  "name": "integrify-docx-template",
   "version": "0.0.1",
   "dependencies": {
     "docxtemplater": "^3.0.3",
