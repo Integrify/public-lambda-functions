@@ -39,3 +39,4 @@ jspm_packages
 *.idea
 /integrify-box-push/test/BoxPushSpec-rich.js
 /integrify-sharepoint-push/test/SharePointPushSpec-rich.js
+/integrify-box-push/27365781_zh7nep2p_config.json

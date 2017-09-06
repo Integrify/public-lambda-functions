@@ -4,6 +4,7 @@ var request = require("request")
 var BoxSDK = require('box-node-sdk');
 var fs = require ("fs");
 var streamBuffers = require('stream-buffers');
+var path = require("path");
 
 //create a new Integrfiy AWS Lambda object passing in a configuration object with inputs, outputs and your execute function
 var config = {
@@ -138,7 +139,16 @@ function getBoxFileUrl(boxClient, fileID, callback) {
 }
 
 
-function getBoxClient(options){
+function getBoxClient(options) {
+    //allow us to pass in a file
+    if (options.boxAppSettingsPath) {
+        let settings = require(options.boxAppSettingsPath);
+        options.boxClientID = settings.boxAppSettings.clientID;
+        options.clientSecret = settings.boxAppSettings.clientSecret;
+        options.publicKeyID = settings.boxAppSettings.appAuth.publicKeyID;
+        options.privateKey = settings.boxAppSettings.appAuth.privateKey;
+        options.passphrase = settings.boxAppSettings.appAuth.passphrase;
+    }
     let sdk = new BoxSDK({
         clientID: options.boxClientID,
         clientSecret: options.boxClientSecret,
