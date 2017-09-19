@@ -34,12 +34,12 @@ var exec = function (event, context, callback) {
         'bearer': event.inputs.accessToken || event.accessToken
     }}, function (err, httpResponse, body) {
 
-        let integrifyFiles = JSON.parse(body);
-        if (err || integrifyFiles.length == 0) {
+
+        if (err) {
             console.error(err || "no files found" );
             return callback(err || "no files found");
         }
-
+        let integrifyFiles = JSON.parse(body);
 
         let integrifyFile = integrifyFiles.sort(function(a,b) {
             return new Date(a.CreatedDate).getTime() - new Date(b.CreatedDate).getTime()
@@ -54,18 +54,11 @@ var exec = function (event, context, callback) {
         //get the file from Integrify and save it to sharepoint
 
         let integrifyFileUrl = integrifyFile.StreamEndpoint;
-        let x = request(event.integrifyServiceUrl + integrifyFileUrl,{'auth': {
-            'bearer': event.inputs.accessToken || event.accessToken
-        }});
-
-
         let rs = new streamBuffers.WritableStreamBuffer();
-
-        x.pipe(rs);
-// Initialize with the string
+        request(event.integrifyServiceUrl + integrifyFileUrl,{'auth': {'bearer': event.accessToken}}).pipe(rs);
 
 
-        let boxClient = getBoxClient(event.inputs);
+        let boxClient = getBoxClient(event);
 
         boxClient.files.preflightUploadFile(
             event.inputs.parentFolderId,
@@ -139,10 +132,15 @@ function getBoxFileUrl(boxClient, fileID, callback) {
 }
 
 
-function getBoxClient(options) {
+function getBoxClient(event) {
     //allow us to pass in a file
+    let options = event.inputs;
+    let settings = null;
+
     if (options.boxAppSettingsPath) {
-        let settings = require(options.boxAppSettingsPath);
+        settings = require(options.boxAppSettingsPath);
+    }
+    if (settings) {
         options.boxClientID = settings.boxAppSettings.clientID;
         options.clientSecret = settings.boxAppSettings.clientSecret;
         options.publicKeyID = settings.boxAppSettings.appAuth.publicKeyID;
