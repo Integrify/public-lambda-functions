@@ -28,7 +28,7 @@ var exec = function (event, context, callback) {
             console.error(err);
             return callback(err);
         }
-
+        filters = JSON.parse(filters);
 
 ///[{"MappingVal":"Request|ID","Expose":"ID","Value":null,"Text":null,"Operator":"Is","FieldType":"textfield","Options":null}]
         try {
@@ -50,40 +50,19 @@ var exec = function (event, context, callback) {
             return callback(error);
         }
 
+        console.log(filters);
 
-        let reportUrl =   integrifyServiceUrl = event.inputs.integrifyServiceUrl || event.integrifyServiceUrl;
-        var formData = {
-            method   : 'POST',
-            url      : 'http://127.0.0.1:3000',
-            json     : true,
-            formData : { file : request(downloadUrl) }
-        };
+        let reportRunUrl = `${integrifyServiceUrl}/reports/${event.inputs.reportSid}`;
+        let options = {"start": 0 , "filters" : [],"persist": true, "page":1, "limit": 10}
+        request.post({url: reportRunUrl,
+            json:options,
+            'auth': {
+                'bearer': event.inputs.accessToken || event.accessToken
+            }},
+            function(err,resp,body){
 
-        request(formData, function(err, res, body){
-            if (err) throw err;
-            console.log("successful");
-        });
-
-
-        let integrifyServiceUrl = event.inputs.integrifyServiceUrl || event.integrifyServiceUrl;
-        var req = request.post(integrifyServiceUrl + '/files/upload/', {'auth': {
-            'bearer': event.inputs.accessToken || event.accessToken
-             }}, function (err, httpResponse, body) {
-            if (err) {
-                console.error('upload failed:', err);
-                return callback(err);
-            }
-            console.log('Upload successful!  Server responded with:', body);
-            let fileKey = JSON.parse(body)[0].file;
-            return callback(null, {fileKey: fileKey, fileName: event.inputs.fileName});
-
-        });
-        var form = req.form();
-        form.append('file', buf, {
-            filename: event.inputs.fileName,
-            contentType: "text/csv"
-        });
-
+                console.log(body);
+            })
 
     })
 
