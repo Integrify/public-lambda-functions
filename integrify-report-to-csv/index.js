@@ -52,18 +52,20 @@ var exec = function (event, context, callback) {
 
         console.log(filters);
 
-        let reportRunUrl = `${integrifyServiceUrl}/reports/${event.inputs.reportSid}`;
-        let options = {"start": 0 , "filters" : [],"persist": true, "page":1, "limit": 10}
-        request.post({url: reportRunUrl,
-            json:options,
+
+        let reportRunUrl = `${integrifyServiceUrl}/reports/${event.inputs.reportSid}/tofile/csv?filters=${filters}`;
+
+        request.get({url: reportRunUrl,
+
             'auth': {
                 'bearer': event.inputs.accessToken || event.accessToken
-            }},
-            function(err,resp,body){
-
-                console.log(body);
-            })
-
+            }}).pipe(
+                request.post(request.post(integrifyServiceUrl + '/files/upload/', {'auth': {
+                    'bearer': event.inputs.accessToken || event.accessToken
+                }}))
+            ).on('response', function(response){
+                console.log(response.statusCode);
+        })
     })
 
 
