@@ -1,12 +1,12 @@
 {
-  "name": "integrify-docx-template",
+  "name": "integrify-box-push",
   "version": "0.0.1",
   "dependencies": {
-    "docxtemplater": "^3.0.3",
+    "box-node-sdk": "^1.8.0",
     "integrify-aws-lambda": "^1.0.3",
-    "jszip": "^2.6.1",
     "request": "^2.79.0",
-    "stream": "0.0.2"
+    "require-from-url": "^3.1.2",
+    "stream-buffers": "^3.0.1"
   },
   "main": "index.js",
   "scripts": {
