@@ -36,7 +36,7 @@ it("should return config.outputs", function() {
 // {key:"username", type:"string"},
 // {key:"password", type:"string"},
 // {key:"zippedFileName", type:"string"}],
-// outputs:[{key:"success", type:"bool"}]
+// outputs:[{key:"success", type:"string"}]
 
 it("should execute and return values", function(done) {
     this.timeout(100000);

@@ -14,7 +14,7 @@ var config = {
             {key:"username", type:"string"},
             {key:"password", type:"string"},
             {key:"zippedFileName", type:"string"}],
-        outputs:[{key:"success", type:"bool"}]
+        outputs:[{key:"success", type:"string"}]
 }
 
 
