@@ -48,7 +48,7 @@ it("should execute and return values", function(done) {
             "port":22,
             "path":"_TEMP",
             "username": "rich",
-            "password" : "Nagshead1"
+            "password" : "xxx"
         },"integrifyServiceUrl":"http://localhost:3500",
         "accessToken":"0755c40b4d934bfa9b0a93f3c752d5c4"
 
