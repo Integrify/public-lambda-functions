@@ -2,8 +2,8 @@
   "name": "integrify-slack-lambda",
   "version": "0.0.1",
   "dependencies": {
-    "integrify-aws-lambda": "^1.1.1",
-    "request": "^2.79.0"
+    "googleapis": "^25.0.0",
+    "integrify-aws-lambda": "^1.1.1"
   },
   "main": "index.js",
   "scripts": {
