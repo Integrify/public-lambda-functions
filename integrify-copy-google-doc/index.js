@@ -4,15 +4,13 @@ var request = require("request");
 
 //create a new Integrfiy AWS Lambda object passing in a configuration object with inputs, outputs and your execute function
 var slack = new integrifyLambda({
-        helpUrl: "https://www.integrify.com",
-        inputs: [{key:"webHookURL", type:"string"},
-            {key:"requestId", type:"string"},
-            {key:"requestSid", type:"string"},
+        inputs: [{key:"fileId", type:"string"},
+            {key:"newFileName", type:"string"},
+            {key:"newTitle", type:"string"},
             {key:"requestName", type:"string"},
-            {key: "requestStatus", type:"string"},
-            {key:"message", type:"string"},
+            {key: "anyoneWithLinkRole", type:"string"},
             {key: "includeLink", type:"string"}],
-        outputs:[{key:"messageStatus", type:"string"}],
+        outputs:[{key:"id", type:"string"},{key:"mimeType", type:"string"},{key:"name", type:"string"},{key:"url", type:"string"}, {key:"minimalUrl", type:"string"}],
         execute: (event, context, callback) => {
             console.info(event);
             let messageBody = `Integrify Request ${event.inputs.requestId} - ${event.inputs.requestName} - ${event.inputs.requestStatus}

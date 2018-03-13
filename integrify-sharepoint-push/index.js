@@ -11,6 +11,7 @@ var buffStream = require("vinyl-source-buffer")
 
 //create a new Integrfiy AWS Lambda object passing in a configuration object with inputs, outputs and your execute function
 var config = {
+        helpUrl: "http://www.integrify.com",
         inputs: [
             {key:"requestSid", type:"string"},
             {key:"file", type:"file"},

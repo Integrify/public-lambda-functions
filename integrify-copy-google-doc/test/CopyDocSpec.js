@@ -17,17 +17,6 @@ it("should return config.inputs", function() {
 
 });
 
-it("should return config.helpUrl", function() {
-    var event = {"operation": "config.getHelpUrl"}
-    slackLambda.handler(event, null, function(err,result){
-        "use strict";
-        //console.log(result)
-        expect(result.length).toBeGreaterThan(0);
-
-    })
-
-});
-
 it("should return config.outputs", function() {
     var event = {"operation": "config.getOutputs"}
     slackLambda.handler(event, null, function(err,result){
