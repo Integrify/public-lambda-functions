@@ -1,2 +1,12 @@
-paste the content of your Google Cloud PLatform Service Account key file here
-see https://cloud.google.com/iam/docs/understanding-service-accounts
+{
+  "type": "service_account",
+  "project_id": "winter-quanta-198013",
+  "private_key_id": "32f50b978740d1f28b6fd83a8a1c6bb06e356f4f",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQCy8mR9Tene6Qmf\nDdN+NlSd5C5cXhKDEko5CnVefhc8/L7hrkMXKId783FUUsY8Pj2EQ2JFug0oOMuH\nTjBKWDoe0XL+EIFqKSAtM9z3MnDN73kQu3RiZ/ef75Y7Jo0BCTYiShAUAm3VW88f\nO37U+OySJDsrVu0WCx3a1z/iCdgTQIu4GFLOLDHyzDPYySC6sbeGfmN37pDK42so\nIgCY5IQd0eOo4D+9UvGnfNS0LScoVUlYRzBmokLN/XHZ3IKxWyWIHf4nuQSfz7bR\nUG9t9op1qRTeSYq45SGgA3qCjOBPdsM7IEM8lZyKJYfLJhIkFljf3hcow1cmUlsj\nCSeYua8zAgMBAAECggEASqdfDvuLPwi/j9CH1Ba8dGZ2hOhmFrJxrpxTXMmDzliv\nFZ3KtYWeCDMGq6QguY9JwL0P6YD17jrLhjYzZUCrdqHwtFeUdgKUPudtHt+3OeLX\nAgkCQ++V2e5tIV4y4yTBpcp6LK7avXEg1qnOfvEeWNWuraUFIfYfTWYRa66pq1XF\nJNWvZXzYGg4zIsQ9F4rsc/bxlFKMkyMcwrcFzIvKIbEAwxoihIyYH24yUdnxCuhb\nqpRq/fISjDgMLbU5B4mJRJRCWCvufn6hjgXcdZGOB0CE1BiVOgsr8dmIybVqo4zF\ndgfbk9poDR6DKpi2uflqiEEdC1v0ZBzuJTuwYrBtAQKBgQDzXcy9M2hnqNPAAUoc\ngUj6sZI6R0EIuEiNxFIynTZJtNebTPNC1Py9v7C03JYRk645mO0qi78LH/DJtape\nh1fuZrHdh49GJyvJVF8Upy08LKdzHDoBDm6HmBTXW/J5zadHn3xHP2/eQyn/dosQ\nJjIZkY2VQzGM0GIUALYk7ujEgQKBgQC8PH5jGQHHUl3TjZHprno4A/Df95uXsYep\nao4nexvMtyGanTKgNIibqyOuqLS/fLnNI1c8lGaNBeFbhj5rPhwwXB/3uRhBs8b+\nFTtWmxjvON5QIg7Z6Ye+8Mzu3nK8ClwlgW4OSY0waPwJFU1FcCGIw3YNGG44yKAx\nF21Qti/JswKBgQCmy7IINpSm/yHp5bhaow1WrJ9xC+b5x/wKFfTUNcXAbI6dJPdQ\n5dM3ZYsB2nGMKHBvj211DIRqZoDMbpMO6KoOfhoHn+JFjZFIEmh8Kjwpkt1NWpoy\noSaGDmiyVZVxf87Xmuo9lq/gYJ4HNcMH1XXe6lBkbcInJaci2H3+ADROgQKBgQCn\nfYRQFQ46FxYZiVyN+4wQj6EjCCVQIs09d+ypQKeJzmF+O+WyG0x6hxsm7EJ4KDkD\nSTD0XG+rh9HwKFEeB5P5i99+AxqMS7UCnE3CUBstsQJPdx6T03HP+l+/I/wfSXCY\nhsQwvk19B81LH8MzyARuts0x9c0NhabUR64jJRj8dQKBgQDLNmAe4Gn19RJTfxaW\nSNprrGSTyg3RZxrEs5FQVlf7Ek42N3ZNkmgEM1a/BzPpDvSMm3oe6KA0Ntn8BqN0\nOAFvXT5CK/NBCqlWu5m1WvLX+OR55t17IWLkxqFTHKr6HpEsdtyJFEWqjQyJKzeb\nggS5c/bwyp83mt1jfaCHDTM7iQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "integrifycloud@winter-quanta-198013.iam.gserviceaccount.com",
+  "client_id": "100998317133383288065",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/integrifycloud%40winter-quanta-198013.iam.gserviceaccount.com"
+}

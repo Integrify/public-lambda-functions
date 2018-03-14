@@ -3,7 +3,7 @@ process.env.testing = true;
 var slackLambda = require("../index.js");
 var expect = require("expect")
 let google = require('googleapis');
-let privatekey = require("../privatekey-testing.json");
+let privatekey = require("../privatekey.json");
 let jwtClient = new google.auth.JWT(
     privatekey.client_email,
     null,
@@ -69,7 +69,7 @@ it("should execute and return values", function(done) {
         fileId:"1OvRjgUH6kPfGlCnPMH-G96OEW1b4pwAVudVrQ0lVfGk",
         newFileName: "UnitTest-" + new Date().toISOString(),
         newTitle: "UnitTest-" + new Date().toISOString(),
-        anyoneWithLinkRole: "writer",
+            makeEditable: "true",
         },"integrifyServiceUrl":"http://localhost:3000"
 
     }

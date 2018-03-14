@@ -1,13 +1,8 @@
 "use strict";
 var integrifyLambda = require('integrify-aws-lambda');
 let google = require('googleapis');
-var privatekey;
-if (process.env.testing) {
-    privatekey = require("./privatekey-testing.json");
-}
-else {
-    privatekey = require("./privatekey.json");
-}
+var privatekey = require("./privatekey.json");
+
 let jwtClient = new google.auth.JWT(
     privatekey.client_email,
     null,
@@ -37,7 +32,7 @@ var gcopy = new integrifyLambda({
         inputs: [{key:"fileId", type:"string"},
             {key:"newFileName", type:"string"},
             {key:"newTitle", type:"string"},
-            {key: "anyoneWithLinkRole", type:"string"}],
+            {key: "makeEditable", type:"string"}],
         outputs:[{key:"fileId", type:"string"},{key:"mimeType", type:"string"},{key:"name", type:"string"},{key:"url", type:"string"}, {key:"embedlUrl", type:"string"}],
         execute: (event, context, callback) => {
             console.info(event);
@@ -56,12 +51,15 @@ var gcopy = new integrifyLambda({
                     url:  "https://drive.google.com/open?id=" + created.id,
                     embedUrl:  "https://drive.google.com/open?minimal=true&id=" + created.id
                 }
-
+                let accessRole = "reader"
+                if (inputs.makeEditable && (inputs.makeEditable.toLowerCase() === "yes" || inputs.makeEditable.toLowerCase() === "true")) {
+                    accessRole = "writer"
+                }
                 drive.permissions.create({
                     auth: jwtClient, fileId: created.id, resource: {
                         value: null,
                         type: "anyone",
-                        role: inputs.anyoneWithLinkRole
+                        role: accessRole
                     }
                 }, function (err, perms) {
                     if (err) {
