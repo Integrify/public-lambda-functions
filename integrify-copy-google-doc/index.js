@@ -51,6 +51,7 @@ var gcopy = new integrifyLambda({
                     url:  "https://drive.google.com/open?id=" + created.id,
                     embedUrl:  "https://drive.google.com/open?minimal=true&id=" + created.id
                 }
+                console.log(outputs)
                 let accessRole = "reader"
                 if (inputs.makeEditable && (inputs.makeEditable.toLowerCase() === "yes" || inputs.makeEditable.toLowerCase() === "true")) {
                     accessRole = "writer"

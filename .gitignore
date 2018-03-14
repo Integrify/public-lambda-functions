@@ -40,3 +40,5 @@ jspm_packages
 /integrify-box-push/test/BoxPushSpec-rich.js
 /integrify-sharepoint-push/test/SharePointPushSpec-rich.js
 /integrify-box-push/27365781_zh7nep2p_config.json
+/integrify-copy-google-doc/privatekey.json
+/integrify-google-doc-permissions/privatekey.json
