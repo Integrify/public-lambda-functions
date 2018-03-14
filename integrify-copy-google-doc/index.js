@@ -1,7 +1,13 @@
 "use strict";
 var integrifyLambda = require('integrify-aws-lambda');
 let google = require('googleapis');
-let privatekey = require("./privatekey.json");
+var privatekey;
+if (process.env.testing) {
+    privatekey = require("./privatekey-testing.json");
+}
+else {
+    privatekey = require("./privatekey.json");
+}
 let jwtClient = new google.auth.JWT(
     privatekey.client_email,
     null,

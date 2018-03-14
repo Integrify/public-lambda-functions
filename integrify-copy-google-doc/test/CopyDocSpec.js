@@ -1,8 +1,9 @@
 "use strict";
+process.env.testing = true;
 var slackLambda = require("../index.js");
 var expect = require("expect")
 let google = require('googleapis');
-let privatekey = require("../privatekey.json");
+let privatekey = require("../privatekey-testing.json");
 let jwtClient = new google.auth.JWT(
     privatekey.client_email,
     null,
@@ -23,6 +24,7 @@ jwtClient.authorize(function (err, tokens) {
 let drive  = google.drive('v3');
 
 var created = "";
+
 
 //create an instance of the IntegrifyLambda with the config
 
@@ -64,7 +66,7 @@ it("should execute and return values", function(done) {
     this.timeout(100000);
     var event = { "operation": "runtime.execute",
         inputs: {
-        fileId:"1tiOUy2rHSOIZn3S-pO7mE3dJvMpbKD8JWLUrAl4UjrA",
+        fileId:"1OvRjgUH6kPfGlCnPMH-G96OEW1b4pwAVudVrQ0lVfGk",
         newFileName: "UnitTest-" + new Date().toISOString(),
         newTitle: "UnitTest-" + new Date().toISOString(),
         anyoneWithLinkRole: "writer",
