@@ -66,7 +66,7 @@ it("should execute and return values", function(done) {
     this.timeout(100000);
     var event = { "operation": "runtime.execute",
         inputs: {
-        fileId:"1OvRjgUH6kPfGlCnPMH-G96OEW1b4pwAVudVrQ0lVfGk",
+        fileId:"1tiOUy2rHSOIZn3S-pO7mE3dJvMpbKD8JWLUrAl4UjrA",
         newFileName: "UnitTest-" + new Date().toISOString(),
         newTitle: "UnitTest-" + new Date().toISOString(),
             makeEditable: "true",
@@ -76,7 +76,7 @@ it("should execute and return values", function(done) {
 
     slackLambda.handler(event, null, function(err,result){
         "use strict";
-        //console.log(result)
+        console.log(result)
         expect(result.fileId).toExist();
         created = result;
         done();

@@ -42,3 +42,11 @@ jspm_packages
 /integrify-box-push/27365781_zh7nep2p_config.json
 /integrify-copy-google-doc/privatekey.json
 /integrify-google-doc-permissions/privatekey.json
+/integrify-copy-google-doc/privateKey.json
+integrify-sftp-push/test/SFTPPushSpec-rich.js
+integrify-sharepoint-push/package-lock.json
+integrify-slack-lambda/event.json
+integrify-slack-lambda/package-lock.json
+privatekey-testing.json
+/integrify-google-sheet-extract/privatekey.json
+integrify-google-sheet-extract/privatekey.json

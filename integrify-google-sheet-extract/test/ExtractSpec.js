@@ -23,7 +23,7 @@ jwtClient.authorize(function (err, tokens) {
 });
 let drive  = google.drive('v3');
 
-var exitingFileOnGoogleCloud = "1pT-Bl4JqPKjQx4L0lHrNEghhSpio4dOiWdZhjnxXgWo";
+var exitingFileOnGoogleCloud = "1FvZZjOLeMIdyvLcVwXWSGOdqTMH1osYK4IQaYo2QqPE";
 
 
 
@@ -65,62 +65,26 @@ it("should return config.outputs", function() {
 
 });
 
+
 it("should execute and set writer permissions file", function(done) {
     this.timeout(100000);
     var event = { "operation": "runtime.execute",
         inputs: {
-        fileId: exitingFileOnGoogleCloud,
-        makeEditable: "true",
+        spreadsheetId: exitingFileOnGoogleCloud,
+        sheetName: "Sheet1",
+        range: "A1:E3",
+        valueSelectors: '["0,1", "0,2", "1,0"]'
         },"integrifyServiceUrl":"http://localhost:3000"
 
     }
 
     slackLambda.handler(event, null, function(err,result){
         "use strict";
-        //console.log(result)
-        expect(result.role).toEqual('writer');
+        console.log(result)
+        expect(result.value_0).toExist();
         done();
 
     })
 
 });
 
-it("should have set the permissions on the file to 'writer'", function(done){
-    this.timeout(100000);
-    drive.permissions.list({auth: jwtClient, fileId: exitingFileOnGoogleCloud}, function (err, perms){
-        console.log(perms.data)
-        let perm = perms.data.permissions.find(p => p.id === 'anyoneWithLink')
-        expect(perm.role).toEqual('writer');
-        done();
-    });
-})
-
-it("should execute and set reader permissions file", function(done) {
-    this.timeout(100000);
-    var event = { "operation": "runtime.execute",
-        inputs: {
-            fileId: exitingFileOnGoogleCloud,
-            makeEditable: "false",
-        },"integrifyServiceUrl":"http://localhost:3000"
-
-    }
-
-    slackLambda.handler(event, null, function(err,result){
-        "use strict";
-        //console.log(result)
-        expect(result.role).toEqual('reader');
-        done();
-
-    })
-
-});
-
-it("should have set the permissions on the file to 'writer'", function(done){
-    this.timeout(100000);
-    drive.permissions.list({auth: jwtClient, fileId: exitingFileOnGoogleCloud}, function (err, perms){
-        console.log(perms.data)
-        let perm = perms.data.permissions.find(p => p.id === 'anyoneWithLink')
-        expect(perm.role).toEqual('reader');
-        done();
-    });
-})

@@ -54,7 +54,9 @@ var gcopy = new integrifyLambda({
                             console.error(err);
                             return callback(err);
                         }
-                        return callback(null, newperms)
+                        let p = newperms.data;
+                        let output = {permissionId: p.id, role: p.role, type: p.type}
+                        return callback(null, output)
 
                     })
                 } else {
@@ -69,7 +71,9 @@ var gcopy = new integrifyLambda({
                                 console.error(err);
                                 return callback(err);
                             }
-                            return callback(null, newperms)
+                        let p = newperms.data;
+                        let output = {permissionId: p.id, role: p.role, type: p.type}
+                        return callback(null, output)
 
                     });
                 }
