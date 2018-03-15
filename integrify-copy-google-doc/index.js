@@ -33,7 +33,7 @@ var gcopy = new integrifyLambda({
             {key:"newFileName", type:"string"},
             {key:"newTitle", type:"string"},
             {key: "makeEditable", type:"string"}],
-        outputs:[{key:"fileId", type:"string"},{key:"mimeType", type:"string"},{key:"name", type:"string"},{key:"url", type:"string"}, {key:"embedlUrl", type:"string"}],
+        outputs:[{key:"fileId", type:"string"},{key:"mimeType", type:"string"},{key:"name", type:"string"},{key:"url", type:"string"}, {key:"embedUrl", type:"string"}],
         execute: (event, context, callback) => {
             console.info(event);
             let inputs = event.inputs;
