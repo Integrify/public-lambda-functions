@@ -49,7 +49,7 @@ var gcopy = new integrifyLambda({
                     mimeType: created.mimeType,
                     name: created.name,
                     url:  "https://drive.google.com/open?id=" + created.id,
-                    embedUrl:  "https://drive.google.com/open?minimal=true&id=" + created.id
+                    embedUrl:  "https://drive.google.com/open?rm=minimal&id=" + created.id
                 }
                 console.log(outputs)
                 let accessRole = "reader"
