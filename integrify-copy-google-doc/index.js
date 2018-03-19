@@ -83,6 +83,7 @@ var gcopy = new integrifyLambda({
                                 if (err) return callback(err)
                                 let existingPerm = perms.data.permissions.find(p => p.id === 'anyoneWithLink')
                                 outputs.anyoneWithLinkRole = existingPerm.role;
+                                console.log(outputs)
                                 return callback(null, outputs)
                             })
 
