@@ -33,7 +33,12 @@ var gcopy = new integrifyLambda({
             {key:"newFileName", type:"string"},
             {key:"newTitle", type:"string"},
             {key: "makeEditable", type:"string"}],
-        outputs:[{key:"fileId", type:"string"},{key:"mimeType", type:"string"},{key:"name", type:"string"},{key:"url", type:"string"}, {key:"embedUrl", type:"string"}],
+        outputs:[{key:"fileId", type:"string"},
+            {key:"mimeType", type:"string"},
+            {key:"name", type:"string"},
+            {key:"url", type:"string"},
+            {key:"embedUrl", type:"string"},
+            {key: "anyoneWithLinkRole", type: "string"}],
         execute: (event, context, callback) => {
             console.info(event);
             let inputs = event.inputs;
@@ -56,21 +61,38 @@ var gcopy = new integrifyLambda({
                 if (inputs.makeEditable && (inputs.makeEditable.toLowerCase() === "yes" || inputs.makeEditable.toLowerCase() === "true")) {
                     accessRole = "writer"
                 }
-                drive.permissions.create({
-                    auth: jwtClient, fileId: created.id, resource: {
-                        value: null,
-                        type: "anyone",
-                        role: accessRole
-                    }
-                }, function (err, perms) {
-                    if (err) {
-                        console.error(err);
-                        return callback(err);
-                    }
-                    return callback(null, outputs)
+                drive.permissions.list({auth: jwtClient, fileId: created.id}, function (err, perms){
+                    console.log(perms.data)
+                    //update a permisson to remove write access
+                    let existingPerm = perms.data.permissions.find(p => p.id === 'anyoneWithLink')
+                    if (existingPerm) {
+                        drive.permissions.update({auth: jwtClient, fileId: created.id, permissionId: 'anyoneWithLink', resource: {role: "reader"}}, function (err, perms){
+                            console.log(perms.data);
+                            drive.permissions.list({auth: jwtClient, fileId: created.id}, function (err, perms) {
+                                console.log(perms.data)
+                            })
+                        })
+                    } else {
+                        drive.permissions.create({auth: jwtClient, fileId: created.id, resource: {value: null, type: "anyone", role: accessRole }}, function (err, perms) {
+                            if (err) {
+                                console.error(err);
+                                return callback(err);
+                            }
 
+                            drive.permissions.list({auth: jwtClient, fileId: created.id}, function (err, perms) {
+                                if (err) return callback(err)
+                                let existingPerm = perms.data.permissions.find(p => p.id === 'anyoneWithLink')
+                                outputs.anyoneWithLinkRole = existingPerm.role;
+                                return callback(null, outputs)
+                            })
+
+
+                        });
+                    }
 
                 });
+
+
             });
 
         }

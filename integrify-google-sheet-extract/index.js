@@ -65,6 +65,7 @@ var gcopy = new integrifyLambda({
                         outputs['value_' + idx] = rows[coordinates[0]][coordinates[1]];
 
                     })
+                    console.info(outputs);
                     return callback(null, outputs);
                 }
             });
