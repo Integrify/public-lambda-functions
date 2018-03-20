@@ -17,17 +17,6 @@ it("should return config.inputs", function() {
 
 });
 
-it("should return config.helpUrl", function() {
-    var event = {"operation": "config.getHelpUrl"}
-    slackLambda.handler(event, null, function(err,result){
-        "use strict";
-        //console.log(result)
-        expect(result.length).toBeGreaterThan(0);
-
-    })
-
-});
-
 it("should return config.outputs", function() {
     var event = {"operation": "config.getOutputs"}
     slackLambda.handler(event, null, function(err,result){
@@ -39,27 +28,36 @@ it("should return config.outputs", function() {
 
 });
 
-
+// inputs: inputs: [
+// {key:"requestSid", type:"string"},
+// {key:"files", type:"file"},
+// {key:"sftpHost", type:"string"},
+// {key: "path", type: "string"},
+// {key:"username", type:"string"},
+// {key:"password", type:"string"},
+// {key:"zippedFileName", type:"string"}],
+// outputs:[{key:"success", type:"string"}]
 
 it("should execute and return values", function(done) {
+    this.timeout(100000);
     var event = { "operation": "runtime.execute",
         "inputs":{
-            "webHookURL" : "https://hooks.slack.com/services/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",
-            "requestId":"1234",
-            "requestSid":"e1c6082d-62cb-46d0-9a77-374ef836d49d",
-            "requestName":"Fake Request",
-            "requestStatus":"Submitted",
-            "includeLink":"true",
-            "message":"this is a test"
-
-        },"integrifyServiceUrl":"http://localhost:3000"
+            "requestSid": "912bea6f-3e86-4d65-9e05-add3c552d538",
+            "files" : "submit-error1.PNG",
+            "sftpHost":"127.0.0.1",
+            "port":22,
+            "path":"_TEMP",
+            "username": "rich",
+            "password" : "xxx"
+        },"integrifyServiceUrl":"http://localhost:3500",
+        "accessToken":"0755c40b4d934bfa9b0a93f3c752d5c4"
 
     }
 
     slackLambda.handler(event, null, function(err,result){
         "use strict";
         //console.log(result)
-        expect(result.messageStatus).toExist();
+        expect(result.success).toExist();
         done();
 
     })
