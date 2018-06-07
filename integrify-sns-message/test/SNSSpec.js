@@ -41,16 +41,17 @@ it("should return config.outputs", function() {
 
 
 
-it("should execute and return values", function(done) {
+it("should send a SMS message and return a message id", function(done) {
     var event = { "operation": "runtime.execute",
         "inputs":{
-            "phoneNumber" : "+1 919 260 6087",
+            "phoneNumber" : "919-260-6087",
             "requestId":"27484",
             "requestSid":"bdea46e9-f8f1-4ee7-a420-654ae9cbd52d",
             "requestName":"Fake Request",
             "requestStatus":"Submitted",
             "includeLink":"true",
-            "message":"this is a test"
+            "message":"this is a test",
+            "subject": "hi there"
 
         },"integrifyServiceUrl":"http://daily.integrify.com"
 
@@ -59,7 +60,32 @@ it("should execute and return values", function(done) {
     slackLambda.handler(event, null, function(err,result){
         "use strict";
         //console.log(result)
-        expect(result.messageStatus).toExist();
+        expect(result.messageId).toExist();
+        done();
+
+    })
+
+});
+it("should publish to a topic and return a message id", function(done) {
+    var event = { "operation": "runtime.execute",
+        "inputs":{
+            "topicArn" : "arn:aws:sns:us-east-1:940767003169:LambdaTest",
+            "requestId":"27484",
+            "requestSid":"bdea46e9-f8f1-4ee7-a420-654ae9cbd52d",
+            "requestName":"Fake Request",
+            "requestStatus":"Submitted",
+            "includeLink":"true",
+            "message":"Topic Notification this is a test",
+            "subject": "hi there"
+
+        },"integrifyServiceUrl":"http://daily.integrify.com"
+
+    }
+
+    slackLambda.handler(event, null, function(err,result){
+        "use strict";
+        //console.log(result)
+        expect(result.messageId).toExist();
         done();
 
     })

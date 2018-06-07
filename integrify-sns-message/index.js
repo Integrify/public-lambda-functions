@@ -29,12 +29,16 @@ var shortenUrl = async function(event) {
 //create a new Integrfiy AWS Lambda object passing in a configuration object with inputs, outputs and your execute function
 var slack = new integrifyLambda({
         helpUrl: "https://www.integrify.com",
-        inputs: [{key:"phone", type:"string"},
+        inputs: [
+            {key:"message", type:"string"},
+            {key:"topicArn", type:"string"},
+            {key:"phoneNumber", type:"string"},
             {key:"requestId", type:"string"},
             {key:"requestSid", type:"string"},
             {key:"requestName", type:"string"},
             {key: "requestStatus", type:"string"},
-            {key:"message", type:"string"},
+            {key:"nonUSCountryCode", type:"string"},
+            {key: "subject", type:"string"},
             {key: "includeLink", type:"string"}],
         outputs:[{key:"messageId", type:"string"}],
         execute: async (event, context, callback) => {
@@ -45,15 +49,33 @@ ${event.inputs.message}
             let message = {};
            if (event.inputs.includeLink) {
                let shortUrl = await shortenUrl(event)
-
                 message.text = messageBody + `View Request ${event.inputs.requestId}: ${shortUrl.data.url}`
             }
 
             let params = {
                 Message:  message.text,
-                PhoneNumber: '+1 919 260 6087',
-                Subject: 'test sub'
             };
+           if (event.inputs.subject) {
+               params.Subject = event.inputs.subject
+           }
+           if (event.inputs.topicArn) {
+               params.TopicArn = event.inputs.topicArn
+           }
+            if (event.inputs.phoneNumber) {
+                // Require `PhoneNumberFormat`.
+                const PNF = require('google-libphonenumber').PhoneNumberFormat;
+                const phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
+                let countryCode = event.inputs.nonUSCountryCode ? event.inputs.nonUSCountryCode : 'US'
+                const number = phoneUtil.parseAndKeepRawInput(event.inputs.phoneNumber, countryCode);
+                if (phoneUtil.isValidNumber(number)) {
+                    params.PhoneNumber = phoneUtil.format(number, PNF.E164);
+                }
+            }
+            if (!params.TopicArn && !params.PhoneNumber) {
+               return callback('Invalid or missing topicArn or phoneNumber')
+            }
+            console.log('sending SNS with params:')
+            console.log(params)
             sns.publish(params, (err, data) => {
                 if (err) {
                     console.error(err)
