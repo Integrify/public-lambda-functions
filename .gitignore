@@ -50,3 +50,4 @@ integrify-slack-lambda/package-lock.json
 privatekey-testing.json
 /integrify-google-sheet-extract/privatekey.json
 integrify-google-sheet-extract/privatekey.json
+/integrify-sns-message/publicLambdaAccess.js
