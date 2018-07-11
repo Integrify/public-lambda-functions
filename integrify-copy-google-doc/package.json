@@ -2,7 +2,7 @@
   "name": "integrify-slack-lambda",
   "version": "0.0.1",
   "dependencies": {
-    "googleapis": "^25.0.0",
+    "googleapis": "^30.0.0",
     "integrify-aws-lambda": "^1.1.1"
   },
   "main": "index.js",
@@ -12,7 +12,7 @@
   "author": "Integrify Inc. <npm@interify.com> (http://www.integrify.com)",
   "license": "ISC",
   "devDependencies": {
-    "expect": "^1.20.2",
-    "mocha": "^3.1.2"
+    "expect": "^22.4.3",
+    "mocha": "^5.1.1"
   }
 }

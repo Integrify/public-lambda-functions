@@ -6,6 +6,7 @@ var request = require("request");
 //create a new Integrfiy AWS Lambda object passing in a configuration object with inputs, outputs and your execute function
 var config = {
     inputs: [
+        {key:"requestId", type:"numeric"},
         {key:"requestSid", type:"string"},
         {key:"file", type:"file"},
         {key:"name_part_1", type:"string"},
@@ -49,55 +50,37 @@ var exec = function (event, context, callback) {
 
         //get the file from Integrify and save it to sftp site
         let options = event.inputs;
-        let integrifyFileUrl = integrifyFile.StreamEndpoint;
-        request(event.integrifyServiceUrl + integrifyFileUrl, {
-            'auth': {
-                'bearer': event.inputs.accessToken || event.accessToken
-            }
-        }, function (err, rsp, fbody) {
+        let fileKey = integrifyFile.FileKey;
+        let fileName = integrifyFile.FileName
+        let fileExtension = fileName.substr(fileName.lastIndexOf("."));
 
+        let separator = event.inputs.name_part_separator;
+        let newfilename = event.inputs['name_part_1'];
+        for (let i = 2; i < 7; i++) {
+            let part = event.inputs['name_part_' + i];
+            if (part) {
+                newfilename = newfilename + separator + part;
+            }
+        }
+        if (event.inputs.append_time_stamp && (event.inputs.append_time_stamp.toLowerCase() == "true" ||event.inputs.append_time_stamp.toLowerCase() == "yes") ) {
+            newfilename = newfilename + separator + new Date().toISOString();
+        }
+        newfilename += fileExtension;
+
+        request.put(event.integrifyServiceUrl  + '/files/' + event.inputs.requestId + '/' + fileKey + '/copyandrename?new_name=' + newfilename, {'auth': {
+                'bearer': event.inputs.accessToken || event.accessToken
+            }, json: {new_name: newfilename}}, function (err, httpResponse, result) {
             if (err) {
+                console.error('upload failed:', err);
                 return callback(err);
             }
-            if (body === 'Permission to run denied') {
-                return callback('Permission Denied');
-            }
-            let filename = rsp.headers['content-disposition']
-                .split('; ')[1]
-                .replace('filename=', '')
-                .replace(/"/g, '');
-            let fileExtension = filename.substr(filename.lastIndexOf("."));
-            let separator = event.inputs.name_part_separator;
-            let newfilename = event.inputs['name_part_1'];
-            for (let i = 2; i < 7; i++) {
-                let part = event.inputs['name_part_' + i];
-                if (part) {
-                    newfilename = newfilename + separator + part;
-                }
-            }
-            if (event.inputs.append_time_stamp && (event.inputs.append_time_stamp.toLowerCase() == "true" ||event.inputs.append_time_stamp.toLowerCase() == "yes") ) {
-                newfilename = newfilename + separator + new Date().toISOString();
-            }
-            newfilename += fileExtension;
-
-            var req = request.post(event.integrifyServiceUrl  + '/files/upload/', {'auth': {
-                    'bearer': event.inputs.accessToken || event.accessToken
-                }}, function (err, httpResponse, fileInfo) {
-                if (err) {
-                    console.error('upload failed:', err);
-                    return callback(err);
-                }
-                console.log('Upload successful!  Server responded with:', fileInfo);
-                let fileKey = JSON.parse(fileInfo)[0].file;
-                return callback(null, {fileKey: fileKey, fileName: newfilename});
-
-            });
-            var form = req.form();
-            form.append('file', fbody, {
-                filename: newfilename
-            });
+            let fileResult = result
+            console.log(fileResult)
+            return callback(null, {fileKey: fileResult.file, fileName: newfilename});
 
         });
+
+
     });
 
 
