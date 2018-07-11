@@ -45,8 +45,9 @@ it("should execute and return values", function(done) {
     this.timeout(100000);
     var event = { "operation": "runtime.execute",
         "inputs":{
-            "requestSid": "f5fcb515-2cd3-4028-a592-c296268fd55f",
-            "file" : "Capture.PNG",
+            "requestSid": "1c9b6127-4228-4202-af90-33492fe7d5aa",
+            "requestId": "5012",
+            "file" : "hashkey.ipml",
             "name_part_1": "newname",
             "name_part_2": "part2",
             "name_part_3": "part3",
@@ -55,8 +56,8 @@ it("should execute and return values", function(done) {
             "name_part_6": "part6",
             "name_part_separator": "-",
             "append_time_stamp": "true",
-        },"integrifyServiceUrl":"https://localhost:3500",
-        "accessToken":"0755c40b4d934bfa9b0a93f3c752d5c4"
+        },"integrifyServiceUrl":"http://localhost:3500",
+        "accessToken":"dc565383a1a947ff9ddc0e7fb0e5d52c"
 
     }
 
