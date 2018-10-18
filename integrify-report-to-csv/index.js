@@ -55,11 +55,17 @@ var exec = function (event, context, callback) {
             // The error thrown here contains additional information when logged with JSON.stringify (it contains a property object).
             return callback(error);
         }
+        let reportFiltes = parsedFilters.map(f=> {
+            return {
+                "field": f.MappingVal,
+                "data": { "type":"string", "value": f.Value,"comparison":f.Operator}
+            }
+        })
+        reportFiltes = JSON.stringify(reportFiltes)
+        console.log(reportFiltes);
 
-        console.log(filters);
 
-
-        let reportRunUrl = `${integrifyServiceUrl}/reports/${event.inputs.reportSid}/tofile/csv?filters=${filters}`;
+        let reportRunUrl = `${integrifyServiceUrl}/reports/${event.inputs.reportSid}/tofile/csv?filters=${reportFiltes}`;
 
 
         request.get({url: reportRunUrl,

@@ -38,7 +38,30 @@ it("should execute and return values", function(done) {
             "csvFileName": "test"
         },
         "integrifyServiceUrl": "http://localhost:3500",
-        "accessToken": "1dfbc10557a245bd97c3cad7c60cd5c5"
+        "accessToken": "37c41f1c38d8400dbcb37497ee34d64f"
+    }
+
+    slackLambda.handler(event, null, function(err,result){
+        "use strict";
+        //console.log(result)
+        expect(result.fileKey).toExist();
+        done();
+
+    })
+
+});
+
+it("should execute with filters and return values", function(done) {
+    this.timeout(100000);
+    var event = {
+        "operation": "runtime.execute",
+        "inputs": {
+            "reportSid": "13ef8026-b00b-48ac-a3e3-2639e034d6a7",
+            "csvFileName": "test",
+            "ID": 584
+        },
+        "integrifyServiceUrl": "http://localhost:3500",
+        "accessToken": "37c41f1c38d8400dbcb37497ee34d64f"
     }
 
     slackLambda.handler(event, null, function(err,result){
