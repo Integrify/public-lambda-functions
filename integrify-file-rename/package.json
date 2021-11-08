@@ -2,13 +2,16 @@
   "name": "integrify-file-rename",
   "version": "0.0.1",
   "dependencies": {
-    "integrify-aws-lambda": "^1.1.1",
+    "integrify-aws-lambda": "^1.1.2",
     "request": "^2.79.0"
   },
   "author": "Integrify Inc. <npm@interify.com> (http://www.integrify.com)",
   "license": "ISC",
+  "scripts": {
+    "test": "mocha"
+  },
   "devDependencies": {
-    "expect": "^1.20.2",
-    "mocha": "^3.1.2"
+    "mocha": "^9.1.3",
+    "chai": "^4.3.4"
   }
 }

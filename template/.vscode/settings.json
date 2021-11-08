@@ -1,0 +1,5 @@
+{
+    "mochaExplorer.debuggerPort": 7111,
+    "mochaExplorer.timeout": 20000,
+    "mochaExplorer.exit": true
+}

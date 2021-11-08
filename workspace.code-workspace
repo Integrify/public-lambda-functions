@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"mochaExplorer.debuggerPort": 9748,
+		"mochaExplorer.exit": true,
+		"mochaExplorer.timeout": 10000
+
+		
+		
+	}
+}

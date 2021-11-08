@@ -1,7 +1,7 @@
 "use strict";
 process.env.testing = true;
 var slackLambda = require("../index.js");
-var expect = require("expect")
+const expect = require('chai').expect;
 let google = require('googleapis');
 let privatekey = require("../privatekey.json");
 let jwtClient = new google.auth.JWT(

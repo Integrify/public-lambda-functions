@@ -1,7 +1,7 @@
 "use strict";
 process.env.testing = true;
 var slackLambda = require("../index.js");
-var expect = require("expect")
+const expect = require('chai').expect;
 let google = require('googleapis');
 let privatekey = require("../privatekey.json");
 let jwtClient = new google.auth.JWT(
@@ -81,7 +81,7 @@ it("should execute and set writer permissions file", function(done) {
     slackLambda.handler(event, null, function(err,result){
         "use strict";
         console.log(result)
-        expect(result.value_0).toExist();
+        expect(result.value_0).to.exist
         done();
 
     })

@@ -1,6 +1,6 @@
 "use strict";
 var slackLambda = require("../index.js");
-var expect = require("expect")
+const expect = require('chai').expect;
 
 
 //create an instance of the IntegrifyLambda with the config
@@ -60,7 +60,7 @@ it("should send a SMS message and return a message id", function(done) {
     slackLambda.handler(event, null, function(err,result){
         "use strict";
         //console.log(result)
-        expect(result.messageId).toExist();
+        expect(result.messageId).to.exist
         done();
 
     })
@@ -85,7 +85,7 @@ it("should publish to a topic and return a message id", function(done) {
     slackLambda.handler(event, null, function(err,result){
         "use strict";
         //console.log(result)
-        expect(result.messageId).toExist();
+        expect(result.messageId).to.exist
         done();
 
     })

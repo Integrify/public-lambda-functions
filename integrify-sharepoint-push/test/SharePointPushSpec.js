@@ -1,6 +1,6 @@
 "use strict";
 var slackLambda = require("../index.js");
-var expect = require("expect")
+const expect = require('chai').expect;
 
 
 //create an instance of the IntegrifyLambda with the config
@@ -56,7 +56,7 @@ it("should execute and return values", function(done) {
     slackLambda.handler(event, null, function(err,result){
         "use strict";
         //console.log(result)
-        expect(result.sharePointFileUrl).toExist();
+        expect(result.sharePointFileUrl).to.exist
         done();
 
     })

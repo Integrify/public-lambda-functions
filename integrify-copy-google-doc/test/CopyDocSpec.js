@@ -1,7 +1,7 @@
 "use strict";
 process.env.testing = true;
 var slackLambda = require("../index.js");
-var expect = require("expect")
+const expect = require('chai').expect;
 let google = require('googleapis');
 let privatekey = require("../privatekey.json");
 let jwtClient = new google.auth.JWT(
@@ -77,7 +77,7 @@ it("should execute and return values", function(done) {
     slackLambda.handler(event, null, function(err,result){
         "use strict";
         console.log(result)
-        expect(result.fileId).toExist();
+        expect(result.fileId).to.exist
         created = result;
         done();
 
@@ -110,7 +110,7 @@ it("should copy the copy and set the permissions on the file to 'writer'", funct
     slackLambda.handler(event, null, function(err,result){
         "use strict";
         console.log(result)
-        expect(result.fileId).toExist();
+        expect(result.fileId).to.exist
         created = result;
         drive.permissions.list({auth: jwtClient, fileId: created.fileId}, function (err, perms){
             console.log(perms.data)
