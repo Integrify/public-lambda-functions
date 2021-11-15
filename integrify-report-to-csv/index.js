@@ -65,7 +65,7 @@ var exec = function (event, context, callback) {
         console.log(reportFiltes);
 
 
-        let reportRunUrl = `${integrifyServiceUrl}/reports/${event.inputs.reportSid}/tofile/csv?filters=${reportFiltes}`;
+        let reportRunUrl = `${integrifyServiceUrl}/core-service/reports/${event.inputs.reportSid}/export/csv_utf8?start=0&filters=${reportFiltes}`;
 
 
         request.get({url: reportRunUrl,
@@ -76,16 +76,16 @@ var exec = function (event, context, callback) {
 
             if (err1) return callback(err1);
 
-            var req = request.post(integrifyServiceUrl + '/files/upload/', {'auth': {
+            var req = request.post(`${integrifyServiceUrl}/api/files/temp/${event.instanceName}/upload`, {'auth': {
                 'bearer': event.inputs.accessToken || event.accessToken
             }}, function (err, httpResponse, fileInfo) {
-                if (err) {
+                if (err || fileInfo == 'expired token') {
                     console.error('upload failed:', err);
-                    return callback(err);
+                    return callback(err || fileInfo);
                 }
                 console.log('Upload successful!  Server responded with:', fileInfo);
-                let fileKey = JSON.parse(fileInfo)[0].file;
-                return callback(null, {fileKey: fileKey, fileName: event.inputs.fileName});
+                let fileKey = JSON.parse(fileInfo)[0].sid;
+                return callback(null, {fileKey: fileKey, fileName: event.inputs.csvFileName});
 
             });
             var form = req.form();
