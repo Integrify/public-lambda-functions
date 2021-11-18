@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"mochaExplorer.debuggerPort": 5111,
+		"mochaExplorer.files":  "report-to-csv/tests/**/*.js",
+	}
+}
