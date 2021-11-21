@@ -1,0 +1,31 @@
+{
+    "configurations": [
+       
+   
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name":"ReportToCsvFunction",
+            "invokeTarget": {
+                "target": "template",
+                "templatePath": "${workspaceFolder}/template.yaml",
+                "logicalId": "ReportToCsvFunction"
+            },
+            "lambda": {
+                "payload": {"json": {
+                    "operation": "runtime.execute",
+                    "inputs": {
+                        "reportSid": "reportSid",
+                        "csvFileName": "test"
+                    },
+                    "integrifyServiceUrl": "http://integrifydev.localhost:8233",
+                    "accessToken": "accessToken",
+                    "instanceName" : "integrifydev"
+                  }},
+                "environmentVariables": {},
+                "runtime": "nodejs14.x"
+            }
+        },
+       
+    ]
+}

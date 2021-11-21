@@ -15,13 +15,12 @@ Resources:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
       CodeUri: report-to-csv/
-      Handler: app.lambdaHandler
+      Handler: app2.lambdaHandler
       Runtime: nodejs14.x
       FunctionName: integrify-report-to-csv
       Description: "Report-To-CSV: Runs a report and attaches the results as a CSV file to the completed Lambda task."
       Role: arn:aws:iam::564858915116:role/PublicLambdaAccess
-      Architectures:
-        - x86_64
+ 
      
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function

@@ -12,9 +12,9 @@ var config = {
 }
 
 
-var exec = function (event, context, callback) {
+var exec = async function (event, context) {
             console.info(event);
-
+            return {fileKey: "121212121", fileName:"foo"}
     let filterUrl = `reports/${event.inputs.reportSid}/filters`;
     let integrifyServiceUrl = event.inputs.integrifyServiceUrl || event.integrifyServiceUrl;
     request.get(integrifyServiceUrl + '/' + filterUrl, {'auth': {
@@ -99,6 +99,23 @@ var exec = function (event, context, callback) {
 
 
 };
+
+exports.lambdaHandler = async (event, context) => {
+    try {
+        // const ret = await axios(url);
+        response =
+             JSON.stringify({
+                message: 'hello world',
+                // location: ret.data.trim()
+            })
+        } catch (err) {
+        console.log(err);
+        return err;
+    }
+
+    return response
+};
+
 
 config.execute = exec;
 

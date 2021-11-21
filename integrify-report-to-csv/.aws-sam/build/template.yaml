@@ -9,24 +9,20 @@ Globals:
   Function:
     Timeout: 3
 Resources:
-  HelloWorldFunction:
+  ReportToCsvFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: HelloWorldFunction
-      Handler: app.lambdaHandler
+      CodeUri: ReportToCsvFunction
+      Handler: app2.lambdaHandler
       Runtime: nodejs14.x
-      Architectures:
-      - x86_64
+      FunctionName: integrify-report-to-csv
+      Description: 'Report-To-CSV: Runs a report and attaches the results as a CSV
+        file to the completed Lambda task.'
+      Role: arn:aws:iam::564858915116:role/PublicLambdaAccess
 Outputs:
-  HelloWorldFunction:
-    Description: Hello World Lambda Function ARN
+  ReportToCsvFunction:
+    Description: Report To CSV Function ARN
     Value:
       Fn::GetAtt:
       - ReportToCsvFunction
-      - Arn
-  HelloWorldFunctionIamRole:
-    Description: Implicit IAM Role created for Report To CSV function
-    Value:
-      Fn::GetAtt:
-      - ReportToCsvFunctionRole
       - Arn

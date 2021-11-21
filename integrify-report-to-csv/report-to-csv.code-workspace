@@ -6,6 +6,7 @@
 	],
 	"settings": {
 		"mochaExplorer.debuggerPort": 5111,
-		"mochaExplorer.files":  "report-to-csv/tests/**/*.js",
+		"mochaExplorer.files": "report-to-csv/tests/**/*.js",
+		"mochaExplorer.exit": true,
 	}
 }
