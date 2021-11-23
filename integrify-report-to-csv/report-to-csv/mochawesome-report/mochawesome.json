@@ -1,0 +1,119 @@
+{
+  "stats": {
+    "suites": 0,
+    "tests": 3,
+    "passes": 3,
+    "pending": 0,
+    "failures": 0,
+    "start": "2021-11-22T14:02:59.117Z",
+    "end": "2021-11-22T14:02:59.126Z",
+    "duration": 9,
+    "testsRegistered": 3,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "26244c26-6b89-4c44-abee-c6eae21f31ba",
+      "title": "",
+      "fullFile": "",
+      "file": "",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [
+        {
+          "title": "should return config.inputs",
+          "fullTitle": "should return config.inputs",
+          "timedOut": false,
+          "duration": 0,
+          "state": "passed",
+          "speed": "fast",
+          "pass": true,
+          "fail": false,
+          "pending": false,
+          "context": null,
+          "code": "var event = {\"operation\": \"config.getInputs\"}\nlambdaHandler(event, null, function(err,result){\n    \"use strict\";\n    //console.log(result)\n    expect(result.length).to.be.gt(0);\n})",
+          "err": {},
+          "uuid": "921d00bd-a640-4f35-9c50-4606406976f4",
+          "parentUUID": "26244c26-6b89-4c44-abee-c6eae21f31ba",
+          "isHook": false,
+          "skipped": false
+        },
+        {
+          "title": "should return config.outputs",
+          "fullTitle": "should return config.outputs",
+          "timedOut": false,
+          "duration": 1,
+          "state": "passed",
+          "speed": "fast",
+          "pass": true,
+          "fail": false,
+          "pending": false,
+          "context": null,
+          "code": "var event = {\"operation\": \"config.getOutputs\"}\nconst result = await lambdaHandler(event, null)\n    //console.log(result)\nexpect(result.length).to.be.gt(0);",
+          "err": {},
+          "uuid": "64f47905-8b08-42bc-b5a4-a3346279d817",
+          "parentUUID": "26244c26-6b89-4c44-abee-c6eae21f31ba",
+          "isHook": false,
+          "skipped": false
+        },
+        {
+          "title": "should execute and return values",
+          "fullTitle": "should execute and return values",
+          "timedOut": false,
+          "duration": 2,
+          "state": "passed",
+          "speed": "fast",
+          "pass": true,
+          "fail": false,
+          "pending": false,
+          "context": null,
+          "code": "var event = {\n    \"operation\": \"runtime.execute\",\n    \"inputs\": {\n        \"reportSid\": reportSid,\n        \"csvFileName\": \"test\"\n    },\n    \"integrifyServiceUrl\": \"http://integrifydev.localhost:8233\",\n    \"accessToken\": accessToken,\n    \"instanceName\" : \"integrifydev\"\n}\nconst result = await lambdaHandler(event, null) \n  \nconsole.log(result)\nexpect(result).to.exist",
+          "err": {},
+          "uuid": "f5a6de37-edd6-4dde-86e4-d2ae89cf612b",
+          "parentUUID": "26244c26-6b89-4c44-abee-c6eae21f31ba",
+          "isHook": false,
+          "skipped": false
+        }
+      ],
+      "suites": [],
+      "passes": [
+        "921d00bd-a640-4f35-9c50-4606406976f4",
+        "64f47905-8b08-42bc-b5a4-a3346279d817",
+        "f5a6de37-edd6-4dde-86e4-d2ae89cf612b"
+      ],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 3,
+      "root": true,
+      "rootEmpty": false,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "8.4.0"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": true,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.0.1"
+    },
+    "marge": {
+      "options": null,
+      "version": "6.0.1"
+    }
+  }
+}

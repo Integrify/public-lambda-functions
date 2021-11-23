@@ -1,8 +1,12 @@
 
 import integrifyLambda from 'integrify-aws-lambda';
 import fetch from 'node-fetch';
-
-
+import {createWriteStream} from 'fs';
+import {pipeline} from 'stream';
+import {promisify} from 'util'
+import { FormData, formDataToBlob } from 'formdata-polyfill/esm.min.js'
+import File from 'fetch-blob/file.js'
+const streamPipeline = promisify(pipeline);
 // //create a new Integrfiy AWS Lambda object passing in a configuration object with inputs, outputs and your execute function
 let config = {
         inputs: [{key:"reportSid", type:"string"},
@@ -11,25 +15,6 @@ let config = {
 }
 
 
-// const exec = async (event, context)  => {
-//     //console.info(event);
-//     return {hi: "there"};
-   
-// }
-
-// config.execute = exec;
-
-
-
-// let docx = new integrifyLambda(config);
-
-
-// //Export the handler function of the new object
-
-// const lambdaHandler = docx.handler;
-
-// const axios = require('axios')
-// const url = 'http://checkip.amazonaws.com/';
 let response;
 
 /**
@@ -41,18 +26,37 @@ let response;
  * @param {Object} context
  *
  * Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
- * @returns {Object} object - API Gateway Lambda Proxy Output Format
+ * @returns {Object} object 
  * 
  */
 const handler = async (event, context) => {
     try {
-        // const ret = await axios(url);
+
+        const integrifyServiceUrl = event.inputs.integrifyServiceUrl || event.integrifyServiceUrl;
+
+
+        let reportRunUrl = `${integrifyServiceUrl}/core-service/reports/${event.inputs.reportSid}/export/csv_utf8?start=0`;
+        const rresponse = await fetch(reportRunUrl, {method:'GET', headers: {'Authorization': 'Bearer ' + event.accessToken}})
+        let reportData = await rresponse.text();
+  
+        // }
+        console.log(reportData)
+        
+
+        const form = new FormData();
+        form.append('file-upload', new File([reportData],  event.inputs.csvFileName))
+
+        const fresponse = await fetch(`${integrifyServiceUrl}/api/files/temp/${event.instanceName}/upload`, 
+            {method: 'POST', body: form, headers: {'Authorization': 'Bearer ' + event.accessToken}});
+        const data = await fresponse.json();
+        console.log(data);
+    
         response =
             {
                 message: 'hello world',
                 // location: ret.data.trim()
             }
-        } catch (err) {
+    } catch (err) {
         console.log(err);
         return err;
     }

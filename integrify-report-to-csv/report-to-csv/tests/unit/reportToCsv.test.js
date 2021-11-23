@@ -1,7 +1,7 @@
 import {lambdaHandler}  from "../../app2.js";
 import {expect}  from  'chai';
-const reportSid = "33e3a4f4-5fb5-4106-9110-bc59fca5d93d"
-const accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb250YWN0U2lkIjoiNEU5OUUwREQtQjNCMy00RDVELTgyNkQtM0Q1QUU2MkExNkNGIiwidXNlck5hbWUiOiJpQXBwcm92ZSIsInRlbmFudCI6ImludGVncmlmeWRldiIsImVtYWlsIjoibm8tcmVwbHlAaW50ZWdyaWZ5LmNvbSIsIm5hbWUiOiJTeXN0ZW0gU3lzdGVtIiwiaWF0IjoxNjM3Mjg4MjExLCJleHAiOjE2MzcyODg4MTEsImF1ZCI6ImludGVncmlmeWRldiJ9.kUE18Ffmm8n_pg5-5aSuzbRE5N6vlaDoCz8Op6SYkj8"
+const reportSid = "f27dfb55-ef82-4504-9717-f47221a2d94f" //"33e3a4f4-5fb5-4106-9110-bc59fca5d93d"
+const accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb250YWN0R3VpZCI6IjRFOTlFMERELUIzQjMtNEQ1RC04MjZELTNENUFFNjJBMTZDRiIsImNvbnRhY3RJZCI6MSwibnRJZCI6ImlBcHByb3ZlIiwiZmlyc3ROYW1lIjoiU3lzdGVtIiwibWlkZGxlTmFtZSI6ImJvYiIsImxhc3ROYW1lIjoiU3lzdGVtIiwiZW1haWwiOiJuby1yZXBseUBpbnRlZ3JpZnkuY29tIiwicGhvbmUiOm51bGwsImxvY2F0aW9uIjpudWxsLCJhZGRyZXNzMSI6bnVsbCwiYWRkcmVzczIiOm51bGwsImNpdHkiOm51bGwsInN0YXRlIjpudWxsLCJ6aXAiOm51bGwsImNvdW50cnkiOm51bGwsInRpdGxlIjpudWxsLCJkZXBhcnRtZW50IjpudWxsLCJjb3N0Q2VudGVyIjpudWxsLCJkaXZpc2lvbiI6bnVsbCwicmVwb3J0c1RvR3VpZCI6bnVsbCwic2lnbmF0dXJlR3VpZCI6bnVsbCwiY0ZpZWxkMSI6bnVsbCwiY0ZpZWxkMiI6bnVsbCwibGFzdFVwZGF0ZSI6bnVsbCwibGFuZ3VhZ2VHdWlkIjoiMkE4MDNEODAtREU2RC00QURDLUE2NDItNEUzRDgzMUY1NDYwIiwidGltZXpvbmUiOiJVVEMiLCJsb2NhbGUiOiJlbi1VUyIsImNyZWF0ZWREYXRlIjoiMjAwNi0wMS0wMVQwNTowMDowMC4wMDBaIiwiY3JlYXRlZEJ5IjoiNEU5OUUwREQtQjNCMy00RDVELTgyNkQtM0Q1QUU2MkExNkNGIiwibW9kaWZpZWREYXRlIjoiMjAyMS0xMC0zMVQxODowMDowOC42MjNaIiwibW9kaWZpZWRCeSI6IkQ4QzQ2OUMzLUY3ODEtNDE3OS1BMDlDLTZEMTQ4ODg1RkIzMCIsImRlbGV0ZWREYXRlIjpudWxsLCJkZWxldGVkQnkiOm51bGwsImNvbnRhY3RTaWQiOiI0RTk5RTBERC1CM0IzLTRENUQtODI2RC0zRDVBRTYyQTE2Q0YiLCJ1c2VyTmFtZSI6ImlBcHByb3ZlIiwicGFzc3dvcmRSZXNldERhdGUiOm51bGwsInRlbmFudCI6ImludGVncmlmeWRldiIsIm5hbWUiOiJTeXN0ZW0gU3lzdGVtIiwiaWF0IjoxNjM3Njc3OTU4LCJleHAiOjE2MzgwMzc5NTgsImF1ZCI6ImludGVncmlmeWRldiJ9.19rRyZwj9RHJJa6hNPpKL_Qdgo_kuLPQwDYl069w8WE"
 //create an instance of the IntegrifyLambda with the config
 
 
@@ -10,6 +10,7 @@ it("should return config.inputs", function() {
     lambdaHandler(event, null, function(err,result){
         "use strict";
         //console.log(result)
+        console.log(process.env.INTEGRIFY_ENV_TOKEN)
         expect(result.length).to.be.gt(0);
 
     })
@@ -31,7 +32,8 @@ it("should execute and return values", async () => {
         "operation": "runtime.execute",
         "inputs": {
             "reportSid": reportSid,
-            "csvFileName": "test"
+            "csvFileName": "test.csv",
+            "Request|ID":1
         },
         "integrifyServiceUrl": "http://integrifydev.localhost:8233",
         "accessToken": accessToken,
