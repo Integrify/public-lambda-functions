@@ -34,11 +34,10 @@ const handler = async (event, context) => {
 
 
         let reportRunUrl = `${integrifyServiceUrl}/core-service/reports/${event.inputs.reportSid}/export/csv_utf8?start=0`;
+        console.info("reportRunUrl", reportRunUrl) 
         const rresponse = await fetch(reportRunUrl, {method:'GET', headers: {'Authorization': 'Bearer ' + event.accessToken}})
         let reportData = await rresponse.text();
-  
-        // }
-        
+        console.log("reportdata:", reportData)
         
 
        const form = new FormData();
