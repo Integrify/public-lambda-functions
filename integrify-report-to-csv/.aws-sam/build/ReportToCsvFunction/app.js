@@ -1,127 +1,64 @@
-"use strict";
-var integrifyLambda = require('integrify-aws-lambda');
-var request = require("request");
-var fs = require('fs');
-var path = require('path');
 
-//create a new Integrfiy AWS Lambda object passing in a configuration object with inputs, outputs and your execute function
-var config = {
+import integrifyLambda from 'integrify-aws-lambda';
+import fetch from 'node-fetch';
+import { FormData } from 'formdata-polyfill/esm.min.js'
+import File from 'fetch-blob/file.js'
+
+// //create a new Integrfiy AWS Lambda object passing in a configuration object with inputs, outputs and your execute function
+let config = {
         inputs: [{key:"reportSid", type:"string"},
             {key:"csvFileName", type:"string"}],
         outputs:[{key:"fileKey", type:"fileattachment"}, {key:"fileName", type: "string"}]
 }
 
 
-var exec = async function (event, context) {
-            console.info(event);
-            return {fileKey: "121212121", fileName:"foo"}
-    let filterUrl = `reports/${event.inputs.reportSid}/filters`;
-    let integrifyServiceUrl = event.inputs.integrifyServiceUrl || event.integrifyServiceUrl;
-    request.get(integrifyServiceUrl + '/' + filterUrl, {'auth': {
-        'bearer': event.inputs.accessToken || event.accessToken
-    }}, function (err, httpResponse, filters) {
 
 
+/**
+ *
+ * Event doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
+ * @param {Object} event - API Gateway Lambda Proxy Input Format
+ *
+ * Context doc: https://docs.aws.amazon.com/lambda/latest/dg/nodejs-prog-model-context.html 
+ * @param {Object} context
+ *
+ * Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
+ * @returns {Object} object 
+ * 
+ */
+const handler = async (event, context) => {
 
-
-        if (err) {
-            console.error(err);
-            return callback(err);
-        }
-        let parsedFilters = [];
-        try {
-            parsedFilters = JSON.parse(filters);
-        } catch(e){
-            console.log("no filters")
-        }
-
-
-///[{"MappingVal":"Request|ID","Expose":"ID","Value":null,"Text":null,"Operator":"Is","FieldType":"textfield","Options":null}]
-        try {
-            //loop though filters and populate with inputs
-            parsedFilters.forEach(f=>{
-                f.Value = event.inputs[f.Expose] || "";
-            })
-
-        }
-        catch (error) {
-            var e = {
-                message: error.message,
-                name: error.name,
-                stack: error.stack,
-                properties: error.properties,
-            }
-            console.log(JSON.stringify({error: e}));
-            // The error thrown here contains additional information when logged with JSON.stringify (it contains a property object).
-            return callback(error);
-        }
-        let reportFiltes = parsedFilters.map(f=> {
-            return {
-                "field": f.MappingVal,
-                "data": { "type":"string", "value": f.Value,"comparison":f.Operator}
-            }
-        })
-        reportFiltes = JSON.stringify(reportFiltes)
-        console.log(reportFiltes);
-
-
-        let reportRunUrl = `${integrifyServiceUrl}/core-service/reports/${event.inputs.reportSid}/export/csv_utf8?start=0&filters=${reportFiltes}`;
-
-
-        request.get({url: reportRunUrl,
-
-            'auth': {
-                'bearer': event.inputs.accessToken || event.accessToken
-            }},function(err1,rsp1,reportData){
-
-            if (err1) return callback(err1);
-
-            var req = request.post(`${integrifyServiceUrl}/api/files/temp/${event.instanceName}/upload`, {'auth': {
-                'bearer': event.inputs.accessToken || event.accessToken
-            }}, function (err, httpResponse, fileInfo) {
-                if (err || fileInfo == 'expired token') {
-                    console.error('upload failed:', err);
-                    return callback(err || fileInfo);
-                }
-                console.log('Upload successful!  Server responded with:', fileInfo);
-                let fileKey = JSON.parse(fileInfo)[0].sid;
-                return callback(null, {fileKey: fileKey, fileName: event.inputs.csvFileName});
-
-            });
-            var form = req.form();
-            form.append('file', reportData, {
-                filename: event.inputs.csvFileName.indexOf(".") == -1 ? event.inputs.csvFileName + ".csv" : event.inputs.csvFileName,
-                contentType: "text/csv"
-            });
-        })
-    })
-
-
-
-};
-
-exports.lambdaHandler = async (event, context) => {
     try {
-        // const ret = await axios(url);
-        response =
-             JSON.stringify({
-                message: 'hello world',
-                // location: ret.data.trim()
-            })
-        } catch (err) {
+
+        const integrifyServiceUrl = event.inputs.integrifyServiceUrl || event.integrifyServiceUrl;
+
+
+        let reportRunUrl = `${integrifyServiceUrl}/core-service/reports/${event.inputs.reportSid}/export/csv_utf8?start=0`;
+        const rresponse = await fetch(reportRunUrl, {method:'GET', headers: {'Authorization': 'Bearer ' + event.accessToken}})
+        let reportData = await rresponse.text();
+  
+        // }
+        
+        
+
+       const form = new FormData();
+       form.append('file-upload', new File([reportData],  event.inputs.csvFileName))
+
+        const fresponse = await fetch(`${integrifyServiceUrl}/api/files/temp/${event.instanceName}/upload`, 
+            {method: 'POST', body: form, headers: {'Authorization': 'Bearer ' + event.accessToken}});
+           
+        const data = await fresponse.json();
+        console.info('upload response', data);
+        return data;
+    
+        
+    } catch (err) {
         console.log(err);
         return err;
     }
 
-    return response
 };
-
-
-config.execute = exec;
-
-let docx = new integrifyLambda(config);
-
-
-
-//Export the handler function of the new object
-exports.lambdaHandler = docx.handler;
+config.execute = handler;
+let lambdaTask = new integrifyLambda(config)
+const lambdaHandler = lambdaTask.handler;
+export {lambdaHandler}
