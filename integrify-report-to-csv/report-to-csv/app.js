@@ -49,7 +49,7 @@ const handler = async (event, context) => {
            
         const data = await fresponse.json();
         console.info('upload response', data);
-        return data;
+        return {fileKey: data[0].sid, fileName: data[0].originalFilename}
     
         
     } catch (err) {

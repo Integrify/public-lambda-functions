@@ -44,7 +44,7 @@ it("should execute and return values", async () => {
       
     
     expect(result).to.exist
-    expect(result[0].sid).to.exist;
+    expect(result.fileKey).to.exist;
 
 
 });
