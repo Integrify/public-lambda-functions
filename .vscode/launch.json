@@ -3,6 +3,41 @@
         {
             "type": "aws-sam",
             "request": "direct-invoke",
+            "name": "integrify-sharepoint-push:HelloWorldFunction (nodejs14.x)",
+            "invokeTarget": {
+                "target": "template",
+                "templatePath": "${workspaceFolder}/integrify-sharepoint-push/template.yaml",
+                "logicalId": "HelloWorldFunction"
+            },
+            "lambda": {
+                "payload": {},
+                "environmentVariables": {},
+                "runtime": "nodejs14.x"
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
+            "name": "API integrify-sharepoint-push:HelloWorldFunction (nodejs14.x)",
+            "invokeTarget": {
+                "target": "api",
+                "templatePath": "${workspaceFolder}/integrify-sharepoint-push/template.yaml",
+                "logicalId": "HelloWorldFunction"
+            },
+            "api": {
+                "path": "/hello",
+                "httpMethod": "get",
+                "payload": {
+                    "json": {}
+                }
+            },
+            "lambda": {
+                "runtime": "nodejs14.x"
+            }
+        },
+        {
+            "type": "aws-sam",
+            "request": "direct-invoke",
             "name": "integrify-report-to-csv:HelloWorldFunction (nodejs14.x)",
             "invokeTarget": {
                 "target": "template",
@@ -18,11 +53,11 @@
         {
             "type": "aws-sam",
             "request": "direct-invoke",
-            "name": "API integrify-report-to-csv:HelloWorldFunction (nodejs14.x)",
+            "name": "API integrify-report-to-csv:integrify-report-to-csv (nodejs14.x)",
             "invokeTarget": {
                 "target": "api",
                 "templatePath": "${workspaceFolder}/integrify-report-to-csv/template.yaml",
-                "logicalId": "HelloWorldFunction"
+                "logicalId": "integrify-report-to-csv"
             },
             "api": {
                 "path": "/hello",

@@ -1,0 +1,38 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  integrify-sharepoint-push
+
+  Sample SAM Template for integrify-sharepoint-push
+  
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 3
+
+Resources:
+  HelloWorldFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: sharepoint-push/
+      Handler: app.lambdaHandler
+      Runtime: nodejs14.x
+      FunctionName: SharepointPush
+      Description: "Sharepoint Push: Push a file to Sharepoint"
+      Role: arn:aws:iam::564858915116:role/PublicLambdaAccess
+     
+      Events:
+        HelloWorld:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /hello
+            Method: get
+
+Outputs:
+  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+  # Find out more about other implicit resources you can reference within SAM
+  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+ 
+  HelloWorldFunction:
+    Description: "Sharepoint Push Function ARN"
+    Value: !GetAtt SharepointPush.Arn

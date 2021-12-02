@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"mochaExplorer.debuggerPort": 5112,
+		"mochaExplorer.envPath": "../../1_PLUS/environments/dev/.env",
+		"mochaExplorer.files": "sharepoint-push/tests/**/*test.js",
+		
+		"mochaExplorer.exit": true,
+	}
+}
