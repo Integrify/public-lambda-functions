@@ -1,0 +1,27 @@
+{
+  "name": "integeify-exec-js",
+  "version": "1.0.0",
+  "description": "hello world sample for NodeJS",
+  "main": "app.js",
+  "repository": "https://github.com/awslabs/aws-sam-cli/tree/develop/samcli/local/init/templates/cookiecutter-aws-sam-hello-nodejs",
+  "author": "SAM CLI",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "integrify-aws-lambda": "^2.0.0",
+    "map-stream": "0.0.7",
+    "spsave": "^3.1.0",
+    "vinyl-fs": "^2.4.4",
+    "vinyl-source-buffer": "^1.1.1",
+    "node-fetch": "^3.1.0"
+  },
+  "scripts": {
+    "test": "dotenv -e ../.env -- mocha --exit tests/unit/**/*.js --reporter mochawesome"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "dotenv-cli": "^4.1.0",
+    "mocha": "^8.2.1",
+    "mochawesome": "^7.0.1"
+  }
+}

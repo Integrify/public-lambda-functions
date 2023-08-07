@@ -47,7 +47,7 @@ it("should execute and return values", async function() {
             "sharePointUrl":"https://integrify531.sharepoint.com/",
             "destinationFolder":"Shared Documents/testing",
             "username": "rich.trusky@integrify.com",
-            "password" : "xxx"
+            "password" : "5ysc6ZUdX5sxpQ"
         },"integrifyServiceUrl":"http://integrifydev.localhost:8233",
         "accessToken": accessToken
 
