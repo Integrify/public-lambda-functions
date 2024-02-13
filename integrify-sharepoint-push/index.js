@@ -1,12 +1,12 @@
 "use strict";
 var integrifyLambda = require('integrify-aws-lambda');
 var spsave = require("spsave").spsave;
-var fs = require('fs');
-var path = require('path');
+//var fs = require('fs');
+//var path = require('path');
 var map = require('map-stream')
 var vfs = require('vinyl-fs');
-var request = require("request")
-
+//var request = require("request")
+var fetch = require('node-fetch');
 var buffStream = require("vinyl-source-buffer")
 
 //create a new Integrfiy AWS Lambda object passing in a configuration object with inputs, outputs and your execute function
@@ -27,21 +27,21 @@ var config = {
 }
 
 
-var exec = function (event, context, callback) {
-            console.info(event);
-
+var handler = async (event, context) => {
+            //console.info(event);
+try {
     //get a list of files from integrify for the request using the REST API
     //files/instancelist/:instance_sid
+    const integrifyServiceUrl = event.inputs.integrifyServiceUrl || event.integrifyServiceUrl;
+    const accessToken = event.inputs.accessToken || event.accessToken;
+    const filesEndpint = `${integrifyServiceUrl}/files/instancelist/${event.inputs.requestSid}`;
+    const filesResp = await fetch(filesEndpint, {method:'GET', headers: {'Authorization': 'Bearer ' + accessToken}});
+    let integrifyFiles = await filesResp.json();
 
-    request.get(event.integrifyServiceUrl + '/files/instancelist/' + event.inputs.requestSid, {'auth': {
-        'bearer': event.inputs.accessToken || event.accessToken
-    }}, function (err, httpResponse, body) {
-
-        let integrifyFiles = JSON.parse(body);
-        if (err || integrifyFiles.length == 0) {
-            console.error(err || "no files found" );
-            return callback(err || "no files found");
-        }
+    if (integrifyFiles.length == 0) {
+        console.error(err || "no files found" );
+        return "no files found";
+    }
 
 
         let integrifyFile = integrifyFiles.sort(function(a,b) {
@@ -59,9 +59,8 @@ var exec = function (event, context, callback) {
         let siteUrl = event.inputs.sharePointUrl ;
 
         let integrifyFileUrl = integrifyFile.StreamEndpoint;
-        let x = request(event.integrifyServiceUrl + integrifyFileUrl,{'auth': {
-            'bearer': event.inputs.accessToken || event.accessToken
-        }});
+        const x = await fetch(event.integrifyServiceUrl + integrifyFileUrl, {method: 'GET', headers: {'Authorization': 'Bearer ' + accessToken}});
+        //let x = request(event.integrifyServiceUrl + integrifyFileUrl,{'auth': {'bearer': event.inputs.accessToken || event.accessToken}});
 
         let spSaveCoreOpts = {
             siteUrl: event.inputs.sharePointUrl
@@ -76,26 +75,22 @@ var exec = function (event, context, callback) {
 
         spSaveCoreOpts.checkin = event.inputs.checkin || false;
         spSaveCoreOpts.checkin = event.inputs.checkin || false;
-        x.pipe(buffStream(event.inputs.file))
-            .pipe(map(function(file, done) {
-                spsave(spSaveCoreOpts, {username: event.inputs.username, password: event.inputs.password}, {
-                    file: file,
-                    folder: event.inputs.destinationFolder
-                }).then(function (x) {
-                    console.log(x);
-                    let spUrl = event.inputs.sharePointUrl + "/" + event.inputs.destinationFolder + "/" + event.inputs.file;
-                    callback(null, {sharePointFileUrl: spUrl});
+        let file;
+        const spresult = await spsave(spSaveCoreOpts, {username: event.inputs.username, password: event.inputs.password}, {
+            fileContent: new Buffer(await x.arrayBuffer()),
+            fileName:event.inputs.file,
+            folder: event.inputs.destinationFolder
+        })
+        console.log(spresult);
+     
+        let spUrl = event.inputs.sharePointUrl + "/" + event.inputs.destinationFolder + "/" + event.inputs.file;
+    
 
-                }).catch(function (err) {
-                    console.error(err);
-                    callback(err);
+        const result = {sharePointFileUrl: spUrl}
+    
+        return result;
 
-                }).finally(function(){
-                    return done();
-                })
-            }));
-
-    })
+    
 
     //then, get the file based on event.inputs.questionId
 
@@ -119,15 +114,15 @@ var exec = function (event, context, callback) {
     //     console.log(e);
     //     return callback(e);
     // })
-
+} catch (err) {
+    console.log(err);
+    return err;
+}
 
 };
 
-config.execute = exec;
+config.execute = handler;
 
-let docx = new integrifyLambda(config);
-
-
-
-//Export the handler function of the new object
-exports.handler = docx.handler;
+let lambdaTask = new integrifyLambda(config);
+const lambdaHandler = lambdaTask.handler;
+export {lambdaHandler}
